@@ -1,8 +1,11 @@
 {
-  "extends": "@nrwl/workspace/presets/core.json",
   "npmScope": "kombo",
   "affected": {
     "defaultBase": "main"
+  },
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "libs"
   },
   "cli": {
     "defaultCollection": "@nrwl/workspace"
