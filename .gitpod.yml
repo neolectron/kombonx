@@ -1,2 +1,9 @@
 tasks:
   - init: pnpm install
+
+vscode:
+  extensions:
+    - esbenp.prettier-vscode
+    - firsttris.vscode-jest-runner
+    - nrwl.angular-console
+    - ms-azuretools.vscode-docker
