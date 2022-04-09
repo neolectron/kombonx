@@ -1,0 +1,4 @@
+tls:
+  certificates:
+    - certFile: /etc/traefik/certificates/kombo-dev.cer
+      keyFile: /etc/traefik/certificates/kombo-dev.key

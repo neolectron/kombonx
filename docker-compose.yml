@@ -1,40 +1,103 @@
-x-service: &service
+x-restart:
+  &restart
+  restart: unless-stopped
+
+x-service:
+  &service
+  <<: *restart
   image: pnpm
   build:
     context: .
     dockerfile: docker/pnpm.dockerfile
   working_dir: /app
   user: 1000:1000
-  restart: on-failure
+
   volumes:
     - ./:/app
 
-version: '3'
+version: "3"
+
+volumes:
+  traefik-certificates:
 
 services:
+  traefik:
+    <<: *restart
+    image: traefik:2.4
+    command:
+      - --api.insecure=true
+      - --api.dashboard=true
+
+      - --log.level=DEBUG
+
+      - --providers.docker.exposedByDefault=false
+      - --providers.docker.watch=true
+
+      - --providers.file.filename=/etc/traefik/dynamic-conf.yml
+
+      - --entryPoints.web.address=:80
+      - --entryPoints.websecure.address=:443
+
+      - --entryPoints.web.http.redirections.entrypoint.to=websecure
+      - --entryPoints.web.http.redirections.entrypoint.permanent=true
+
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./docker/config/traefik:/etc/traefik:ro
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dashboard.tls=true
+
+      - traefik.http.routers.dashboard.rule=Host(`traefik.kombo.dev`)
+      - traefik.http.routers.dashboard.service=api@internal
+
+  hosts-generator:
+    <<: *restart
+    image: ghcr.io/zekker6/traefik-hosts-generator:v0.5.4
+    command: "-platform=linux -traefik=true -traefikUrl=http://traefik:8080/api -file=/hosts -watch=true -freq=10"
+    volumes:
+      - /etc/hosts:/hosts
+    depends_on:
+      - traefik
+
   booking-api:
     <<: *service
     command: pnpm serve booking-api
     environment:
       PORT: 8080
-    ports:
-      - 8080:8080
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.booking-api.tls=true
+
+      - traefik.http.routers.booking-api.rule=Host(`booking.kombo.dev`)
+      - traefik.http.services.booking-api.loadbalancer.server.port=8080
 
   kombinator-api:
     <<: *service
     command: pnpm serve kombinator-api
     environment:
       PORT: 8080
-    ports:
-      - 8081:8080
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.kombinator-api.tls=true
+
+      - traefik.http.routers.kombinator-api.rule=Host(`kombinator.kombo.dev`)
+      - traefik.http.services.kombinator-api.loadbalancer.server.port=8080
 
   webapp:
     <<: *service
     command: pnpm serve webapp -- --port $$PORT
     environment:
       PORT: 3000
-    ports:
-      - 3000:3000
     depends_on:
       - booking-api
       - kombinator-api
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.webapp.tls=true
+
+      - traefik.http.routers.webapp.rule=Host(`kombo.dev`)
+      - traefik.http.services.webapp.loadbalancer.server.port=3000
