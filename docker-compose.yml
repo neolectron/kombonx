@@ -4,6 +4,7 @@ x-service: &service
     context: .
     dockerfile: docker/pnpm.dockerfile
   working_dir: /app
+  user: 1000:1000
   restart: on-failure
   volumes:
     - ./:/app
