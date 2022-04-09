@@ -48,6 +48,15 @@
       "options": {
         "lintFilePatterns": ["apps/webapp/**/*.{ts,tsx,js,jsx}"]
       }
+    },
+    "docker": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "file": "docker/webapp.dockerfile",
+        "push": false,
+        "load": true,
+        "tags": ["registry.kombo.co/webapp:latest"]
+      }
     }
   },
   "tags": []

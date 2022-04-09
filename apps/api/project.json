@@ -15,7 +15,8 @@
         "production": {
           "optimization": true,
           "extractLicenses": true,
-          "inspect": false
+          "inspect": false,
+          "generatePackageJson": true
         }
       }
     },
@@ -38,6 +39,15 @@
       "options": {
         "jestConfig": "apps/api/jest.config.js",
         "passWithNoTests": true
+      }
+    },
+    "docker": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "file": "docker/backend.dockerfile",
+        "push": false,
+        "load": true,
+        "tags": ["registry.kombo.co/api:latest"]
       }
     }
   },
