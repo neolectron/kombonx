@@ -1,4 +1,5 @@
 import styles from './index.module.scss';
+import { types } from '@kombo/types';
 
 export function Index() {
   /*
@@ -13,7 +14,7 @@ export function Index() {
           <div id="welcome">
             <h1>
               <span> Hello there, </span>
-              Welcome Peasdasdïo 👋
+              Welcome {types()} library 👋
             </h1>
           </div>
 
