@@ -7,9 +7,6 @@
     "appsDir": "apps",
     "libsDir": "libs"
   },
-  "cli": {
-    "defaultCollection": "@nrwl/next"
-  },
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx/tasks-runners/default",
@@ -30,6 +27,5 @@
         "linter": "eslint"
       }
     }
-  },
-  "defaultProject": "webapp"
+  }
 }

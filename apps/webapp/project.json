@@ -52,7 +52,8 @@
     "docker": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
-        "file": "docker/webapp.dockerfile",
+        "file": "docker/application.dockerfile",
+        "build-args": ["PROJECT=webapp"],
         "push": false,
         "load": true,
         "tags": ["registry.kombo.co/webapp:latest"]

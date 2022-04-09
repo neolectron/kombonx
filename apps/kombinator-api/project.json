@@ -1,15 +1,15 @@
 {
-  "root": "apps/booking-api",
-  "sourceRoot": "apps/booking-api/src",
+  "root": "apps/kombinator-api",
+  "sourceRoot": "apps/kombinator-api/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/node:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/booking-api",
-        "main": "apps/booking-api/src/main.ts",
-        "tsConfig": "apps/booking-api/tsconfig.app.json"
+        "outputPath": "dist/apps/kombinator-api",
+        "main": "apps/kombinator-api/src/main.ts",
+        "tsConfig": "apps/kombinator-api/tsconfig.app.json"
       },
       "configurations": {
         "production": {
@@ -23,21 +23,21 @@
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
-        "buildTarget": "booking-api:build"
+        "buildTarget": "kombinator-api:build"
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/booking-api/**/*.ts"]
+        "lintFilePatterns": ["apps/kombinator-api/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/booking-api"],
+      "outputs": ["coverage/apps/kombinator-api"],
       "options": {
-        "jestConfig": "apps/booking-api/jest.config.js",
+        "jestConfig": "apps/kombinator-api/jest.config.js",
         "passWithNoTests": true
       }
     },
@@ -45,10 +45,10 @@
       "executor": "@nx-tools/nx-docker:build",
       "options": {
         "file": "docker/application.dockerfile",
-        "build-args": ["PROJECT=booking-api"],
+        "build-args": ["PROJECT=kombinator-api"],
         "push": false,
         "load": true,
-        "tags": ["registry.kombo.co/booking-api:latest"]
+        "tags": ["registry.kombo.co/kombinator-api:latest"]
       }
     }
   },

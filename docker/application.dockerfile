@@ -19,22 +19,24 @@ FROM pnpm as build
 ###############################################################################################
 
 WORKDIR /app
+ARG PROJECT
 
 COPY --from=development-dependencies /app /app
 
-COPY ./apps ./apps
+COPY ./apps/${PROJECT} ./apps/${PROJECT}
 COPY ./libs ./libs
 COPY nx.json tsconfig.base.json ./
 
-RUN pnpm build webapp -- --configuration production
+RUN pnpm build ${PROJECT} -- --configuration production
 
 ###############################################################################################
 FROM pnpm as production-dependencies
 ###############################################################################################
 
 WORKDIR /app
+ARG PROJECT
 
-COPY --from=build /app/dist/apps/webapp/package.json ./
+COPY --from=build /app/dist/apps/${PROJECT}/package.json ./
 
 RUN pnpm install --production --unsafe-perm
 
@@ -43,15 +45,15 @@ FROM mhart/alpine-node:slim-14 as application
 ###############################################################################################
 
 WORKDIR /app
+ARG PROJECT
 
 RUN apk add --no-cache tini
 
 RUN adduser -HD node
 
-COPY --from=build --chown=node /app/dist/apps/webapp ./
+COPY --from=build --chown=node /app/dist/apps/${PROJECT} ./
 COPY --from=production-dependencies --chown=node /app/node_modules ./node_modules
 
 USER node
 
 ENTRYPOINT ["tini", "--"]
-CMD ./node_modules/next start
