@@ -20,10 +20,11 @@ FROM pnpm as build
 
 WORKDIR /app
 ARG PROJECT
+ARG PROJECT_PATH
 
 COPY --from=development-dependencies /app /app
 
-COPY ./apps/${PROJECT} ./apps/${PROJECT}
+COPY ${PROJECT_PATH}${PROJECT} ${PROJECT_PATH}${PROJECT}
 COPY ./libs ./libs
 COPY nx.json tsconfig.base.json ./
 
@@ -35,8 +36,9 @@ FROM pnpm as production-dependencies
 
 WORKDIR /app
 ARG PROJECT
+ARG PROJECT_PATH
 
-COPY --from=build /app/dist/apps/${PROJECT}/package.json ./
+COPY --from=build /app/dist/${PROJECT_PATH}${PROJECT}/package.json ./
 
 RUN pnpm install --production --unsafe-perm
 
@@ -46,12 +48,13 @@ FROM mhart/alpine-node:slim-14 as application
 
 WORKDIR /app
 ARG PROJECT
+ARG PROJECT_PATH
 
 RUN apk add --no-cache tini
 
 RUN adduser -HD node
 
-COPY --from=build --chown=node /app/dist/apps/${PROJECT} ./
+COPY --from=build --chown=node /app/dist/${PROJECT_PATH}${PROJECT} ./
 COPY --from=production-dependencies --chown=node /app/node_modules ./node_modules
 
 USER node

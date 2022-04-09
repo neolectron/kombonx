@@ -45,7 +45,7 @@
       "executor": "@nx-tools/nx-docker:build",
       "options": {
         "file": "docker/application.dockerfile",
-        "build-args": ["PROJECT=booking-api"],
+        "build-args": ["PROJECT=booking-api", "PROJECT_PATH=./apps/"],
         "push": false,
         "load": true,
         "tags": ["registry.kombo.co/booking-api:latest"]

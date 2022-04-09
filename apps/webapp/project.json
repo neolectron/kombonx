@@ -53,7 +53,7 @@
       "executor": "@nx-tools/nx-docker:build",
       "options": {
         "file": "docker/application.dockerfile",
-        "build-args": ["PROJECT=webapp"],
+        "build-args": ["PROJECT=webapp", "PROJECT_PATH=./apps/"],
         "push": false,
         "load": true,
         "tags": ["registry.kombo.co/webapp:latest"]
