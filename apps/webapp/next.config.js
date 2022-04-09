@@ -12,7 +12,4 @@ const nextConfig = {
   },
 };
 
-module.exports = {
-  ...withNx(nextConfig),
-  experimental: false,
-};
+module.exports = withNx(nextConfig);
