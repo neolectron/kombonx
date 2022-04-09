@@ -1,0 +1,30 @@
+x-service: &service
+  image: pnpm
+  build:
+    context: .
+    dockerfile: docker/pnpm.dockerfile
+  working_dir: /app
+  restart: on-failure
+  volumes:
+    - ./:/app
+
+version: '3'
+
+services:
+  api:
+    <<: *service
+    command: pnpm serve api
+    environment:
+      PORT: 8080
+    ports:
+      - 8080:8080
+
+  webapp:
+    <<: *service
+    command: pnpm serve webapp -- --port $$PORT
+    environment:
+      PORT: 3000
+    ports:
+      - 3000:3000
+    depends_on:
+      - api
