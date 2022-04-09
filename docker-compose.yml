@@ -11,13 +11,21 @@ x-service: &service
 version: '3'
 
 services:
-  api:
+  booking-api:
     <<: *service
-    command: pnpm serve api
+    command: pnpm serve booking-api
     environment:
       PORT: 8080
     ports:
       - 8080:8080
+
+  kombinator-api:
+    <<: *service
+    command: pnpm serve kombinator-api
+    environment:
+      PORT: 8080
+    ports:
+      - 8081:8080
 
   webapp:
     <<: *service
@@ -27,4 +35,5 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      - api
+      - booking-api
+      - kombinator-api
