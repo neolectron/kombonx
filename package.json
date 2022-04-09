@@ -11,6 +11,7 @@
   },
   "private": true,
   "devDependencies": {
+    "@commitlint/config-conventional": "16.2.1",
     "@nrwl/cli": "13.10.1",
     "@nrwl/cypress": "13.10.1",
     "@nrwl/eslint-plugin-nx": "13.10.1",
